@@ -9,15 +9,15 @@ import (
 )
 
 type Http_server struct {
-	Address string
+	Addr string `yaml:"address" env-required:"true"`
 }
 
 // env-default:"production
 
 type Config struct {
 	Env          string `yaml:"env" env-required:"true"`
-	Storage_path string `yaml:"storage_path" env-require:"true"`
-	Http_server  `yaml:"http-server"`
+	Storage_path string `yaml:"storage_path" env-required:"true"`
+	Http_server  `yaml:"http_server"`
 }
 
 func MustLoad() *Config {
@@ -41,10 +41,11 @@ func MustLoad() *Config {
 	}
 
 	var cfg Config
-	err := cleanenv.ReadConfig(configPath, &cfg)
+	err = cleanenv.ReadConfig(configPath, &cfg)
+
 
 	if err != nil {
-		log.Fatal("can not read config file : %s", err.Error())
+		log.Fatalf("can not read config file : %s", err.Error())
 	}
 
 	return &cfg
